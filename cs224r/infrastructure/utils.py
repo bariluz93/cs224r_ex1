@@ -8,6 +8,7 @@ Functions to edit:
 """
 import numpy as np
 import time
+from policies.base_policy import BasePolicy
 
 ############################################
 ############################################
@@ -16,7 +17,7 @@ MJ_ENV_NAMES = ["Ant-v4", "Walker2d-v4", "HalfCheetah-v4", "Hopper-v4"]
 MJ_ENV_KWARGS = {name: {"render_mode": "rgb_array"} for name in MJ_ENV_NAMES}
 MJ_ENV_KWARGS["Ant-v4"]["use_contact_forces"] = True
 
-def sample_trajectory(env, policy, max_path_length, render=False):
+def sample_trajectory(env, policy: BasePolicy, max_path_length: int, render: bool =False) -> dict[str, np.ndarray]:
     """
     Rolls out a policy and generates a trajectories
 
@@ -25,7 +26,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     :render: whether to save images from the rollout
     """
     # Initialize environment for the beginning of a new rollout
-    ob = TODO # HINT: should be the output of resetting the env
+    ob = env.reset() # HINT: should be the output of resetting the env
 
     # Initialize data storage for across the trajectory
     # You'll mainly be concerned with: obs (list of observations), acs (list of actions)
@@ -45,7 +46,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
 
         # Use the most recent observation to decide what to do
         obs.append(ob)
-        ac = TODO # HINT: Query the policy's get_action function
+        ac = policy.get_action(obs=ob) # HINT: Query the policy's get_action function
         ac = ac[0]
         acs.append(ac)
 
@@ -57,9 +58,9 @@ def sample_trajectory(env, policy, max_path_length, render=False):
         next_obs.append(ob)
         rewards.append(rew)
 
-        # TODO end the rollout if the rollout ended
+        # end the rollout if the rollout ended
         # HINT: rollout can end due to done, or due to max_path_length
-        rollout_done = TODO # HINT: this is either 0 or 1
+        rollout_done = done or (steps >= max_path_length) # HINT: this is either 0 or 1
         terminals.append(rollout_done)
 
         if rollout_done:
@@ -67,40 +68,36 @@ def sample_trajectory(env, policy, max_path_length, render=False):
 
     return Path(obs, image_obs, acs, rewards, next_obs, terminals)
 
-def sample_trajectories(env, policy, min_timesteps_per_batch, max_path_length, render=False):
+def sample_trajectories(env, policy: BasePolicy, min_timesteps_per_batch: int, max_path_length: int, render: bool=False) -> tuple[list[dict[str, np.ndarray]], int]
     """
         Collect rollouts until we have collected `min_timesteps_per_batch` steps.
 
-        TODO implement this function
         Hint1: use sample_trajectory to get each path (i.e. rollout) that goes into paths
         Hint2: use get_pathlength to count the timesteps collected in each path
     """
     timesteps_this_batch = 0
-    paths = []
+    paths: list[dict[str, np.ndarray]] = []
     while timesteps_this_batch < min_timesteps_per_batch:
-
-        # TODO
-        pass
+        path: dict[str, np.ndarray] = sample_trajectory(env, policy, max_path_length, render)
+        paths.append(path)
+        timesteps_this_batch += get_pathlength(path)
 
     return paths, timesteps_this_batch
 
-def sample_n_trajectories(env, policy, ntraj, max_path_length, render=False):
+def sample_n_trajectories(env, policy: BasePolicy, ntraj: int, max_path_length: int, render: bool=False) -> list[dict[str, np.ndarray]]:
     """
         Collect `ntraj` rollouts.
 
-        TODO implement this function
         Hint1: use sample_trajectory to get each path (i.e. rollout) that goes into paths
     """
-    paths = []
-        
-    TODO
-
+    paths = [sample_trajectory(env, policy, max_path_length, render) for _ in range(ntraj)]
+    
     return paths
 
 ############################################
 ############################################
 
-def Path(obs, image_obs, acs, rewards, next_obs, terminals):
+def Path(obs, image_obs, acs, rewards, next_obs, terminals) -> dict[str, np.ndarray]:
     """
         Take information (separate arrays) from a single rollout
         and return it in a single dictionary

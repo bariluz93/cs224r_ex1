@@ -105,6 +105,7 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             observation = obs[None]
 
         # TODO return the action that the policy prescribes
+        # return torch.argmax(self.mean_net(torch.tensor(obs)))
         raise NotImplementedError
 
     def forward(self, observation: torch.FloatTensor) -> Any:
@@ -120,7 +121,6 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # through it. For example, you can return a torch.FloatTensor. You can also
         # return more flexible objects, such as a
         # `torch.distributions.Distribution` object. It's up to you!
-        
         raise NotImplementedError
 
     def update(self, observations, actions):

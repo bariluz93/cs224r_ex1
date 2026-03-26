@@ -70,3 +70,10 @@ You can choose to visualize specific runs with a comma-separated list:
 ```
 tensorboard --logdir data/run1,data/run2,data/run3...
 ```
+
+## installation
+```
+conda create -n rl python=3.12    
+conda activate rl
+uv pip install -r requirements.txt 
+```
