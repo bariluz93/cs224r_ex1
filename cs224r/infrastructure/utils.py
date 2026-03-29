@@ -6,6 +6,7 @@ Functions to edit:
     2. sample_trajectories (line 67)
     3. sample_n_trajectories (line 83)
 """
+import gymnasium as gym
 import numpy as np
 import time
 from policies.base_policy import BasePolicy
@@ -17,7 +18,7 @@ MJ_ENV_NAMES = ["Ant-v4", "Walker2d-v4", "HalfCheetah-v4", "Hopper-v4"]
 MJ_ENV_KWARGS = {name: {"render_mode": "rgb_array"} for name in MJ_ENV_NAMES}
 MJ_ENV_KWARGS["Ant-v4"]["use_contact_forces"] = True
 
-def sample_trajectory(env, policy: BasePolicy, max_path_length: int, render: bool =False) -> dict[str, np.ndarray]:
+def sample_trajectory(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, max_path_length: int, render: bool =False) -> dict[str, np.ndarray]:
     """
     Rolls out a policy and generates a trajectories
 
@@ -68,7 +69,7 @@ def sample_trajectory(env, policy: BasePolicy, max_path_length: int, render: boo
 
     return Path(obs, image_obs, acs, rewards, next_obs, terminals)
 
-def sample_trajectories(env, policy: BasePolicy, min_timesteps_per_batch: int, max_path_length: int, render: bool=False) -> tuple[list[dict[str, np.ndarray]], int]
+def sample_trajectories(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, min_timesteps_per_batch: int, max_path_length: int, render: bool=False) -> tuple[list[dict[str, np.ndarray]], int]
     """
         Collect rollouts until we have collected `min_timesteps_per_batch` steps.
 
@@ -84,7 +85,7 @@ def sample_trajectories(env, policy: BasePolicy, min_timesteps_per_batch: int, m
 
     return paths, timesteps_this_batch
 
-def sample_n_trajectories(env, policy: BasePolicy, ntraj: int, max_path_length: int, render: bool=False) -> list[dict[str, np.ndarray]]:
+def sample_n_trajectories(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, ntraj: int, max_path_length: int, render: bool=False) -> list[dict[str, np.ndarray]]:
     """
         Collect `ntraj` rollouts.
 

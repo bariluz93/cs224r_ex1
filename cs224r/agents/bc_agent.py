@@ -5,6 +5,9 @@ from cs224r.infrastructure.replay_buffer import ReplayBuffer
 from cs224r.policies.MLP_policy import MLPPolicySL
 from .base_agent import BaseAgent
 
+import gymnasium as gym
+import numpy as np
+
 class BCAgent(BaseAgent):
     """
     Attributes
@@ -23,7 +26,7 @@ class BCAgent(BaseAgent):
     sample
         Samples a batch of trajectories from the replay buffer
     """
-    def __init__(self, env, agent_params):
+    def __init__(self, env: gym.Env[np.ndarray, np.ndarray], agent_params):
         super(BCAgent, self).__init__()
 
         # Initialize variables
