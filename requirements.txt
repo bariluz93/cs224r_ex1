@@ -11,4 +11,3 @@ pyvirtualdisplay
 torch
 opencv-python
 ipdb
-box2d-py
