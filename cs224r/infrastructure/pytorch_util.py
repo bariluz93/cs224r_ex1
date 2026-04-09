@@ -70,7 +70,7 @@ def build_mlp(
 
     # Add subsequent hidden layers dynamically
 
-    for i in range(len(n_layers) - 1):
+    for i in range(n_layers - 1):
 
         layers.append(nn.Linear(size, size))
 

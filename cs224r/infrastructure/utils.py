@@ -9,7 +9,7 @@ Functions to edit:
 import gymnasium as gym
 import numpy as np
 import time
-from policies.base_policy import BasePolicy
+from cs224r.policies.base_policy import BasePolicy
 
 ############################################
 ############################################
@@ -69,7 +69,7 @@ def sample_trajectory(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, 
 
     return Path(obs, image_obs, acs, rewards, next_obs, terminals)
 
-def sample_trajectories(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, min_timesteps_per_batch: int, max_path_length: int, render: bool=False) -> tuple[list[dict[str, np.ndarray]], int]
+def sample_trajectories(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, min_timesteps_per_batch: int, max_path_length: int, render: bool=False) -> tuple[list[dict[str, np.ndarray]], int]:
     """
         Collect rollouts until we have collected `min_timesteps_per_batch` steps.
 
