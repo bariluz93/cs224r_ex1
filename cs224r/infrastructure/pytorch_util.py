@@ -6,12 +6,10 @@ Functions to edit:
 '''
 
 
-from typing import Union
-
 import torch
 from torch import nn
 
-Activation = Union[str, nn.Module]
+Activation = str | nn.Module
 
 
 _str_to_activation = {

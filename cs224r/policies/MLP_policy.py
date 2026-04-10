@@ -133,7 +133,8 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         """
         # update the policy and return the loss. Recall that to update the policy
         # you need to backpropagate the gradient and step the optimizer.
-        loss = -self.forward(observations).log_prob(actions).mean()
+        
+        loss = -self.forward(torch.Tensor(observations).to(ptu.device)).log_prob(actions).mean()
         loss.backward()
         self.optimizer.step()
         self.optimizer.zero_grad()

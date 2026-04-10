@@ -146,12 +146,11 @@ class BCTrainer:
                 self.log_metrics = False
 
             # Collect trajectories, to be used for training
-            training_returns = self.collect_training_trajectories(
+            paths, envsteps_this_batch, train_video_paths = self.collect_training_trajectories(
                 itr,
                 initial_expertdata,
                 collect_policy
             )  # HW1: implement this function below
-            paths, envsteps_this_batch, train_video_paths = training_returns
             self.total_envsteps += envsteps_this_batch
 
             # Relabel the collected observations with actions from a provided expert policy
@@ -207,10 +206,8 @@ class BCTrainer:
         print("\nCollecting data to be used for training...") 
         if itr == 0 and load_initial_expertdata is not None:
             with open(load_initial_expertdata, 'rb') as f:
-                data = pickle.load(f)
-            #TODO fix this
-            paths = data['trajectories']
-            envsteps_this_batch = sum([len(path['reward']) for path in paths])
+                paths = pickle.load(f)
+            envsteps_this_batch = sum([len(_["terminal"]) for _ in paths])
         else:
             paths, envsteps_this_batch = utils.sample_trajectories(self.env, collect_policy, self.params['batch_size'], self.params['ep_len'])
 

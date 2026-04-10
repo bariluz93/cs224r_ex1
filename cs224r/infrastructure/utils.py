@@ -14,9 +14,9 @@ from cs224r.policies.base_policy import BasePolicy
 ############################################
 ############################################
 
-MJ_ENV_NAMES = ["Ant-v4", "Walker2d-v4", "HalfCheetah-v4", "Hopper-v4"]
+MJ_ENV_NAMES = ["Ant-v5", "Walker2d-v4", "HalfCheetah-v4", "Hopper-v4"]
 MJ_ENV_KWARGS = {name: {"render_mode": "rgb_array"} for name in MJ_ENV_NAMES}
-MJ_ENV_KWARGS["Ant-v4"]["use_contact_forces"] = True
+# MJ_ENV_KWARGS["Ant-v5"]["use_contact_forces"] = True - deafult in Ant-v5
 
 def sample_trajectory(env: gym.Env[np.ndarray, np.ndarray], policy: BasePolicy, max_path_length: int, render: bool =False) -> dict[str, np.ndarray]:
     """
